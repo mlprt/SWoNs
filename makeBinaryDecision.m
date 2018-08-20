@@ -14,9 +14,9 @@ q = [0.1 0.1];
 nNetworks = size(N, 2);
 
 % simulation parameters
-h = 1e-4;
-maxsteps = 1000;
-nReps = 1000;
+h = 1e-3;
+maxsteps = 500;
+nReps = 100000;
 
 % decision model paramters
 alpha = 0.8;  % 0 = perfect memory, 1 = no memory
@@ -44,7 +44,7 @@ for q = 1:nReps
     if ~mod(q, 100)
         disp(q)
     end
-    [thetas{q}, r{q}, ~, lams{q}, decision(q, :, :)] = pooledInhibBinaryDecision(nets, thres, alpha, beta, eps, omegas, thetas0, lams0, maxsteps, h);
+    [~, r{q}, ~, ~, decision(q, :, :)] = pooledInhibBinaryDecision(nets, thres, alpha, beta, eps, omegas, thetas0, lams0, maxsteps, h);
 end
 
 wins = sum(decision(:,:,1), 1);
