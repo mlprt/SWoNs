@@ -14,7 +14,7 @@ function [thetas, r, z, lams, decision] = pooledInhibBinaryDecision(nets, thres,
 % network parameters
 nNets = size(nets, 2);
 for b = 1:nNets
-    N(b) = nets{b}.numnodes;
+    N(b) = nets{b}.networkObject.numnodes;
     E{b} = weightedA(nets{b});
     
     % pre-allocate arrays and set initial conditions
@@ -59,15 +59,16 @@ for iter = 1:maxsteps-1
     
     %% exit if decision threshold has been reached
     if any(decision)
+        % TODO: infer DT more precisely
         return
     end
 end
 
 function A_w = weightedA(net)
     % weighted adjacency table
-    weightedEdges = table2array(net.Edges);
+    weightedEdges = table2array(net.networkObject.Edges);
     % convert to matrix
-    A_w = zeros(net.numnodes);
+    A_w = zeros(net.networkObject.numnodes);
     for e = 1:size(weightedEdges, 1)
         A_w(weightedEdges(e, 1), weightedEdges(e, 2)) = weightedEdges(e, 3);
     end
